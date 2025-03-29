@@ -11,34 +11,66 @@ type VerbObject = {
 }
 
 export enum TENSES {
-  PRESENT,
+  FUTURE,
   IMPERFECT,
-  FUTURE
+  PRESENT,
+  PRETERITE,
+  PAST_PARTICIPLE,
+  PRESENT_PERFECT,
+  FUTURE_PERFECT,
+  PAST_PERFECT,
+  PRETERITE_ARCHAIC,
+  CONDITIONAL_PERFECT,
+  GERUND,
+  CONDITIONAL,
+  INFINITIVE
+}
+
+type Conjugation = {
+  performer: string;
+  conjugatedVerb: string;
 }
 
 export type Verb = {
   infinitive: string;
-  performer: string;
-  word: string;
-  tense: TENSES;
-  translation: string;
+  conjugations: {
+    [key: string]: Conjugation
+  }
 }
 
 export type VerbDataEntry = [string, Array<VerbObject>];
 
-const mapDataToDesiredObject = (verbs): Verb[] =>
-  Object.entries(verbs)
-    .slice(0, 20) // TODO: Remove (DEV PURPOSES)
-    .map((verbEntry: VerbDataEntry) => {
-      const currentVerbData = verbEntry[1][0];
+const upperCase = (str: string) => str
+  .replace(" ", "_")
+  .replace(/\(|\)/g, "")
+  .toUpperCase();
 
-      return {
-        infinitive: currentVerbData.infinitive,
-        performer: currentVerbData.performer,
-        word: verbEntry[0],
-        tense: currentVerbData.tense.toUpperCase() as TENSES,
-        translation: currentVerbData.translation
-      };
-    });
+const mapDataToDesiredObject = (verbs) =>
+  Object.values(Object.entries(verbs)
+    .slice(0, 500)
+    .reduce((acc, curr: VerbDataEntry) => {
+      const currentInfinitive = curr[1].find(conjugation => !!conjugation.infinitive)?.infinitive;
 
-export const VERBS_ES: Verb[] = mapDataToDesiredObject(verbData);
+      if (!acc[currentInfinitive]) {
+        acc[currentInfinitive] = { infinitive: currentInfinitive, conjugations: {} };
+      }
+
+      curr[1].forEach(conjugation => {
+        const currentTenseCamelized = upperCase(conjugation.tense);
+        if (!acc[currentInfinitive].conjugations[currentTenseCamelized]) {
+          acc[currentInfinitive].conjugations[currentTenseCamelized] = [];
+        }
+
+        const verbConjucation = {
+          performer: conjugation.performer,
+          conjugatedVerb: curr[0]
+        }
+
+        acc[currentInfinitive].conjugations[currentTenseCamelized].push(verbConjucation);
+      })
+
+      return acc;
+    }, {}));
+
+
+export const VERBS_ES = mapDataToDesiredObject(verbData);

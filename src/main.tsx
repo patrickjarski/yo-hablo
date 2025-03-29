@@ -6,6 +6,8 @@ import { VERBS_ES } from "./data";
 
 const Main = () => {
 
+  console.log(VERBS_ES);
+
   return <Home verbs={VERBS_ES}/>;
 }
 

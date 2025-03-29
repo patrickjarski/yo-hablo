@@ -23,7 +23,7 @@ const Home = ({ verbs }: HomeProps) => {
           .map((tense: string) => <option key={tense} value={tense}>{tense}</option>)}
       </select>
       <h2>{pickedTense}</h2>
-      {filteredVerbs.map(verb => <p>{verb.word}</p>)}
+      {filteredVerbs.map(verb => <p><b>{verb.performer}</b> {verb.word}</p>)}
     </div>
   );
 };
