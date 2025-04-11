@@ -33,8 +33,9 @@ type Conjugation = {
 
 export type Verb = {
   infinitive: string;
+  translation: string;
   conjugations: {
-    [key: string]: Conjugation
+    [key: TENSES]: Conjugation
   }
 }
 
@@ -45,7 +46,7 @@ const upperCase = (str: string) => str
   .replace(/\(|\)/g, "")
   .toUpperCase();
 
-const mapDataToDesiredObject = (verbs) =>
+const mapDataToDesiredObject = (verbs): Array<Verb> =>
   Object.values(Object.entries(verbs)
     .slice(0, 500)
     .reduce((acc, curr: VerbDataEntry) => {
@@ -61,6 +62,10 @@ const mapDataToDesiredObject = (verbs) =>
           acc[currentInfinitive].conjugations[currentTenseCamelized] = [];
         }
 
+        if (!acc[currentInfinitive].translation) {
+          acc[currentInfinitive].translation = conjugation.translation;
+        }
+
         const verbConjucation = {
           performer: conjugation.performer,
           conjugatedVerb: curr[0]
@@ -73,4 +78,4 @@ const mapDataToDesiredObject = (verbs) =>
     }, {}));
 
 
-export const VERBS_ES = mapDataToDesiredObject(verbData);
+export const VERBS_ES: Array<Verb> = mapDataToDesiredObject(verbData);
