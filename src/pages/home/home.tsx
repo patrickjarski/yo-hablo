@@ -7,31 +7,25 @@ type HomeProps = {
 };
 
 const Home = ({ verbs }: HomeProps) => {
-  const [pickedTense, setPickedTense] = useState<TENSES>(TENSES[0]);
-  const [filteredVerbs, setFilteredVerbs] = useState<Verb[]>([]);
   const [currentVerbIndex, setCurrentVerbIndex] = useState<number>(0);
+  const [inputValue, setInputValue] = useState<string>("");
 
   useEffect(() => {
-    const filtered = [...verbs]
-      .filter((verb: Verb) => Object.keys(verb.conjugations).includes(pickedTense as string))
-      .map((verb: Verb) => ({ infinitive: verb.infinitive, translation: verb.translation }))
-    setFilteredVerbs(filtered);
-  }, [pickedTense]);
+    if (inputValue === verbs[currentVerbIndex].infinitive) {
+      setInputValue("");
+      setCurrentVerbIndex(prevIndex => prevIndex + 1);
+    }
+  }, [inputValue]);
 
   return (
     <div>
       Home!
-      <select onChange={(event: ChangeEvent<TENSES>) => setPickedTense(event.target.value)}>
-        {Object.values(TENSES).filter(k => typeof k === "string")
-          .map((tense: string) => <option key={tense} value={tense}>{tense}</option>)}
-      </select>
-      <h2>{pickedTense}</h2>
-      <hr/>
-      <p><b>{filteredVerbs[currentVerbIndex]?.infinitive}</b></p>
-      <p>{filteredVerbs[currentVerbIndex]?.translation}</p>
+      <br/>
+      <input onChange={e => setInputValue(e.target.value)} value={inputValue}/>
+      <p>{verbs[currentVerbIndex]?.translation}</p>
       <button
         onClick={() => {
-          if (currentVerbIndex + 1 < filteredVerbs.length) {
+          if (currentVerbIndex + 1 < verbs.length) {
             setCurrentVerbIndex(prevIndex => prevIndex + 1);
           }
         }}
