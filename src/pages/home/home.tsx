@@ -1,5 +1,6 @@
 import { Verb } from "../../data";
 import { FillInTheBlank } from "../fill-in-the-blank";
+import { Flashcards } from "../flashcards";
 
 
 type HomeProps = {
@@ -13,7 +14,8 @@ const Home = ({ verbs }: HomeProps) => {
     <div>
       Home!
       <br/>
-      <FillInTheBlank verbs={verbs}/>
+      {/*<FillInTheBlank verbs={verbs}/>*/}
+      <Flashcards verbs={verbs}/>
     </div>
   );
 };
