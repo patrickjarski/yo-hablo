@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Verb } from "../../data";
+import { useLoaderData } from "react-router";
 
-type FlashcardsProps = {
+type FlashcardsLoaderData = {
   verbs: Verb[];
 }
 
-const Flashcards = (props: FlashcardsProps) => {
-  const { verbs } = props;
+const Flashcards = () => {
+  const { verbs } = useLoaderData<FlashcardsLoaderData>();
 
   const [currentFlashcardIndex, setCurrentFlashcardIndex] = useState<number>(0);
   const [shouldShowEnglishTranslation, setShouldShowEnglishTranslation] = useState<boolean>(false);

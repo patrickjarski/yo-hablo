@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useLoaderData } from "react-router";
+
 import { Verb } from "../../data";
 
-type FillInTheBlankProps = {
+type FillInTheBlankLoaderData = {
   verbs: Verb[];
-};
+}
 
-const FillInTheBlank = (props: FillInTheBlankProps) => {
-  const { verbs } = props;
+const FillInTheBlank = () => {
+  const { verbs } = useLoaderData<FillInTheBlankLoaderData>();
 
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [currentVerbIndex, setCurrentVerbIndex] = useState<number>(0);

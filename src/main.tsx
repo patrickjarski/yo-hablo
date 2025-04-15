@@ -1,16 +1,20 @@
 import { createRoot } from 'react-dom/client'
-import './index.css'
-import { Home } from "./pages/home";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import { VERBS_ES } from "./data";
 
+import { Dashboard } from "./pages/dashboard";
+import { FillInTheBlank } from "./pages/fill-in-the-blank";
+import { Flashcards } from "./pages/flashcards";
 
-const Main = () => {
+import './index.css'
 
-  console.log(VERBS_ES);
-
-  return <Home verbs={VERBS_ES}/>;
-}
+const router = createBrowserRouter([
+  { path: "dashboard", Component: Dashboard, loader: () => ({ verbs: VERBS_ES }) },
+  { path: "flashcards", Component: Flashcards, loader: () => ({ verbs: VERBS_ES }) },
+  { path: "fill-in-the-blank", loader: () => ({ verbs: VERBS_ES }), Component: FillInTheBlank },
+  { path: "conjugate", loader: () => ({ verbs: VERBS_ES }), Component: Flashcards },
+])
 
 createRoot(document.getElementById('root')!).render(
-  <Main/>,
+  <RouterProvider router={router}/>,
 )
