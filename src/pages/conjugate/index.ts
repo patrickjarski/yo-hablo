@@ -1,1 +1,1 @@
-export * from "./Conjugate";
+export * from "./conjugate";

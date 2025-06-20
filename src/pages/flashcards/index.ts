@@ -1,1 +1,1 @@
-export * from "./Flashcards";
+export * from "./flashcards";

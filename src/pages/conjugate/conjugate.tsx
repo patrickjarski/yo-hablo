@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { TENSES, Verb } from "../../data";
 import { useLoaderData } from "react-router";
+import {AppBar} from "../../components/app-bar";
 
 type ConjugateLoaderData = {
   verbs: Verb[];
@@ -37,6 +38,7 @@ const Conjugate = () => {
 
   return (
     <div>
+      <AppBar />
       <h3><b>{filteredVerbs[currentVerbIndex].infinitive}</b></h3>
       <p>
         {filteredVerbs[currentVerbIndex].conjugations["PRESENT"][0].performer}

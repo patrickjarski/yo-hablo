@@ -1,1 +1,1 @@
-export * from "./FillInTheBlank";
+export * from "./fill-in-the-blank";
