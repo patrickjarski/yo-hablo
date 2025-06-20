@@ -7,7 +7,28 @@ import { FillInTheBlank } from "./pages/fill-in-the-blank";
 import { Flashcards } from "./pages/flashcards";
 import { Conjugate } from "./pages/conjugate";
 
-import './index.css';
+import { Box, createTheme, CssBaseline, styled, ThemeProvider } from "@mui/material";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#fff"
+    },
+    secondary: {
+      main: "#30332E"
+    }
+  },
+  typography: {
+    fontFamily: ["Inria Sans"],
+  },
+  spacing: 8,
+  shadows: []
+});
+
+const Root = styled('div')({
+  padding: theme.spacing(0, 2),
+  height: "100vh"
+})
 
 const router = createBrowserRouter([
   { path: "dashboard", Component: Dashboard, loader: () => ({ verbs: VERBS_ES }) },
@@ -17,5 +38,10 @@ const router = createBrowserRouter([
 ])
 
 createRoot(document.getElementById('root')!).render(
-  <RouterProvider router={router}/>,
+  <ThemeProvider theme={theme}>
+    <CssBaseline />
+    <Root>
+      <RouterProvider router={router}/>
+    </Root>
+  </ThemeProvider>,
 )
