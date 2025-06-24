@@ -1,26 +1,8 @@
 import { Box, Stack, styled, Typography, AppBar as AppBarMUI } from "@mui/material";
-import spanishFlag from "../../assets/spanish_flag.png";
+import { useNavigate } from "react-router";
 
-const Button = styled('button')(({ theme }) => ({
-  padding: theme.spacing(0, 1),
-  backgroundColor: theme.palette.primary.main,
-  border: 'none',
-  color: theme.palette.secondary.main,
-  '&:hover': {
-    '&:after': {
-      transform: "scaleX(1)"
-    },
-    backgroundColor: theme.palette.primary.main,
-    cursor: 'pointer'
-  },
-  '&::after': {
-    display: "block",
-    content: '""',
-    borderBottom: `solid 1px ${theme.palette.secondary.main}`,
-    transform: "scaleX(0)",
-    transition: "transform 250ms ease-in-out"
-  },
-}))
+import spanishFlag from "../../assets/spanish_flag.png";
+import { ButtonWithBottomAnimation } from "../button";
 
 const FlagImage = styled('img')(({ theme }) => ({
   maxHeight: theme.spacing(2),
@@ -29,13 +11,18 @@ const FlagImage = styled('img')(({ theme }) => ({
 
 type NavMenuButtonProps = {
   label: string;
+  href: "conjugate" | "fill-in-the-blank" | "flashcards"
 }
 
-const NavMenuButton = ({ label }: NavMenuButtonProps) => (
-  <Button variant="text" color="secondary">
-    <Typography variant="h5">{label}</Typography>
-  </Button>
-)
+const NavMenuButton = ({ label, href }: NavMenuButtonProps) => {
+  const navigate = useNavigate();
+
+  return (
+    <ButtonWithBottomAnimation variant="text" color="secondary" onClick={() => navigate(`/${href}`)}>
+      <Typography variant="h5">{label}</Typography>
+    </ButtonWithBottomAnimation>
+  );
+}
 
 export const AppBar = () => (
   <AppBarMUI position="static">
@@ -45,9 +32,9 @@ export const AppBar = () => (
         <FlagImage src={spanishFlag} alt="Spanish flag" />
       </Stack>
       <Stack direction="row" spacing={2}>
-        <NavMenuButton label="FLASHCARDS" />
-        <NavMenuButton label="FILL IN THE BLANK" />
-        <NavMenuButton label="CONJUGATE" />
+        <NavMenuButton label="FLASHCARDS" href="flashcards" />
+        <NavMenuButton label="FILL IN THE BLANK" href="fill-in-the-blank" />
+        <NavMenuButton label="CONJUGATE" href="conjugate" />
       </Stack>
     </Box>
   </AppBarMUI>
