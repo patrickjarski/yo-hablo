@@ -1,13 +1,8 @@
-import { Verb } from "../../data";
-import { useLoaderData } from "react-router";
 import { AppBar } from "../../components/app-bar";
 
 import dashboardImage from "../../assets/landing_page.jpg";
 import {Box as BoxMUI, styled} from "@mui/material";
 
-type DashboardLoaderData = {
-  verbs: Verb[];
-};
 
 const Box = styled(BoxMUI)({
   maxHeight: "65vh",
@@ -17,7 +12,6 @@ const Box = styled(BoxMUI)({
 })
 
 const Dashboard = () => {
-  const { verbs } = useLoaderData<DashboardLoaderData>();
 
   return (
     <>

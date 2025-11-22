@@ -1,16 +1,25 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLoaderData } from "react-router";
-import {AppBar as AppBarMui, Box, Typography} from "@mui/material";
+import {
+  Box,
+  Input as InputMui,
+  Stack,
+  styled,
+  Typography,
+} from "@mui/material";
 
-import { TENSES, Verb } from "../../data";
+import { Verb } from "../../data";
 import { AppBar } from "../../components/app-bar";
 import { ControlButtons } from "../../components/button";
 
 type ConjugateLoaderData = {
   verbs: Verb[];
-}
+};
 
-
+const Input = styled(InputMui)({
+  maxWidth: "300px",
+  textAlign: "center",
+});
 
 const Conjugate = () => {
   const { verbs } = useLoaderData<ConjugateLoaderData>();
@@ -24,17 +33,25 @@ const Conjugate = () => {
     setInputValue("");
     setHintIndex(0);
     setIsCorrect(false);
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (verbs.length && inputValue === verbs[currentVerbIndex].conjugations["PRESENT"][0].conjugatedVerb) {
+    if (
+      verbs.length &&
+      inputValue ===
+        verbs[currentVerbIndex].conjugations["PRESENT"][0].conjugatedVerb
+    ) {
       setIsCorrect(true);
     }
-  }, [inputValue, verbs.length])
+  }, [inputValue, verbs.length]);
 
   useEffect(() => {
-    setInputValue(verbs[currentVerbIndex].conjugations["PRESENT"][0].conjugatedVerb.substring(0, hintIndex))
-  }, [hintIndex])
+    setInputValue(
+      verbs[currentVerbIndex].conjugations[
+        "PRESENT"
+      ][0].conjugatedVerb.substring(0, hintIndex),
+    );
+  }, [hintIndex]);
 
   if (!verbs.length) {
     return null;
@@ -43,20 +60,32 @@ const Conjugate = () => {
   return (
     <Box>
       <AppBar />
-      <h3><b>{verbs[currentVerbIndex].infinitive}</b></h3>
-      <p>
-        {verbs[currentVerbIndex].conjugations["PRESENT"][0].performer}
-        <input disabled={isCorrect} value={inputValue} onChange={e => setInputValue(e.target.value)}/>
-      </p>
+      <Box paddingTop={(theme) => theme.spacing(30)} component="section">
+        <Stack justifyContent="center" alignItems="center">
+          <Typography variant="h4" textAlign="center" component="h4">
+            {verbs[currentVerbIndex].infinitive}
+          </Typography>
+          <Typography variant="h5" textAlign="center" component="h5">
+            {verbs[currentVerbIndex].conjugations["PRESENT"][0].performer}
+          </Typography>
+          <Input
+            disabled={isCorrect}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            autoFocus
+          />
+        </Stack>
+      </Box>
+
       <ControlButtons
         currentIndex={currentVerbIndex}
         setIndex={setCurrentVerbIndex}
         verbsTotal={verbs.length}
         onIndexButtonsClickCallback={() => resetForm()}
-        onHintClick={() => setHintIndex(prevIndex => prevIndex + 1)}
+        onHintClick={() => setHintIndex((prevIndex) => prevIndex + 1)}
       />
     </Box>
   );
-}
+};
 
 export { Conjugate };

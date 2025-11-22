@@ -1,11 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLoaderData } from "react-router";
 
 import { Verb } from "../../data";
+import { Box, Input, Stack, Typography } from "@mui/material";
+import { AppBar, ControlButtons } from "../../components";
 
 type FillInTheBlankLoaderData = {
   verbs: Verb[];
-}
+};
+
+const CORRECT_TIMEOUT_TIME = 1500;
+let correctTimeout: number | undefined;
 
 const FillInTheBlank = () => {
   const { verbs } = useLoaderData<FillInTheBlankLoaderData>();
@@ -19,50 +24,49 @@ const FillInTheBlank = () => {
     setInputValue("");
     setHintIndex(0);
     setIsCorrect(false);
-  }, [])
+    clearTimeout(correctTimeout);
+  }, []);
 
   useEffect(() => {
     if (inputValue === verbs[currentVerbIndex].infinitive) {
       setIsCorrect(true);
+      correctTimeout = setTimeout(() => {
+        setCurrentVerbIndex((prevIndex) => prevIndex + 1);
+        resetFields();
+      }, CORRECT_TIMEOUT_TIME);
     }
   }, [inputValue]);
 
   return (
-    <div>
-      <h2>FILL IN THE BLANK</h2>
-      <input disabled={isCorrect} onChange={e => setInputValue(e.target.value)} value={inputValue}/>
-      {isCorrect && <p>CORRECT!</p>}
-      <p>{verbs[currentVerbIndex]?.translation}</p>
-      <br/>
-      <button
-        disabled={isCorrect}
-        onClick={() => {
-          setHintIndex(prevIndex => prevIndex + 1)
-        }}
-      >NEXT HINT
-      </button>
-      {hintIndex > 0 && <p>{verbs[currentVerbIndex].infinitive.substring(0, hintIndex)}</p>}
-      <br/>
-      <button
-        onClick={() => {
-          if (currentVerbIndex + 1 < verbs.length) {
-            resetFields();
-            setCurrentVerbIndex(prevIndex => prevIndex + 1);
-          }
-        }}
-      >NEXT VERB
-      </button>
-      <button
-        onClick={() => {
-          if (currentVerbIndex > 0) {
-            resetFields();
-            setCurrentVerbIndex(prevIndex => prevIndex - 1)
-          }
-        }}
-      >PREV VERB
-      </button>
-    </div>
-  )
-}
+    <Box>
+      <AppBar />
+      <Box paddingTop={(theme) => theme.spacing(30)} component="section">
+        <Stack justifyContent="center" alignItems="center" spacing={3}>
+          <Input
+            disabled={isCorrect}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            autoFocus
+          />
+          <Typography variant="h4">
+            {verbs[currentVerbIndex]?.translation}
+          </Typography>
+          {hintIndex > 0 && (
+            <Typography variant="h5">
+              {verbs[currentVerbIndex].infinitive.substring(0, hintIndex)}
+            </Typography>
+          )}
+        </Stack>
+      </Box>
+      <ControlButtons
+        currentIndex={currentVerbIndex}
+        setIndex={setCurrentVerbIndex}
+        verbsTotal={verbs.length}
+        onHintClick={() => setHintIndex((prevIndex) => prevIndex + 1)}
+        onIndexButtonsClickCallback={() => resetFields()}
+      />
+    </Box>
+  );
+};
 
 export { FillInTheBlank };
